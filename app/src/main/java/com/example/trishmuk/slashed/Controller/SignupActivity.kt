@@ -1,9 +1,12 @@
-package com.example.trishmuk.slashed
+package com.example.trishmuk.slashed.Controller
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import com.example.trishmuk.slashed.Controller.Services.AuthService
+import com.example.trishmuk.slashed.R
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
@@ -18,7 +21,11 @@ class SignupActivity : AppCompatActivity() {
     }
 
     fun onSignup(view: View){
-
+        AuthService.registerUser(this, "mukherjeetrish005@gmail.com", "trish789"){
+            if (it === null){
+                Toast.makeText(this,"Please Input a value", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     fun onBgColor(view: View){

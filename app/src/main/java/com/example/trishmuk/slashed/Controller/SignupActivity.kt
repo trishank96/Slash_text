@@ -21,9 +21,20 @@ class SignupActivity : AppCompatActivity() {
     }
 
     fun onSignup(view: View){
-        AuthService.registerUser(this, "mukherjeetrish005@gmail.com", "trish789"){
-            if (it === null){
-                Toast.makeText(this,"Please Input a value", Toast.LENGTH_SHORT).show()
+        val uname = uname_signup.text.toString()
+        val email = email_signup.text.toString()
+        val password = password_signup.text.toString()
+        AuthService.registerUser(this, email, password){registerSuccess ->
+            if (registerSuccess){
+                AuthService.loginUser(this, email, password){loginSuccess->
+                    if (loginSuccess){
+                        AuthService.createUser(this, uname, email, avatar, bgcolor){createSuccess ->
+                            if (createSuccess){
+                                finish()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -36,7 +47,11 @@ class SignupActivity : AppCompatActivity() {
 
         userAvatar.setBackgroundColor(Color.rgb(r,g,b))
 
-        
+        val savedR = r.toDouble() / 255
+        val savedG = g.toDouble() /255
+        val savedB = b.toDouble() /255
+
+        bgcolor = "[$savedR, $savedG, $savedB, 1]"
 
     }
 

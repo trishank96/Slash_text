@@ -21,5 +21,6 @@ class LoginActivity : AppCompatActivity() {
     fun CreateUser(view: View){
         val signupIntent = Intent(this, SignupActivity::class.java)
         startActivity(signupIntent)
+        finish()
     }
 }

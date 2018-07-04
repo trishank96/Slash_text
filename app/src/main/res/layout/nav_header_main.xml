@@ -17,7 +17,7 @@
         android:id="@+id/userIcon_nav"
         android:layout_width="60dp"
         android:layout_height="64dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
         android:background="@android:color/transparent"
         android:onClick="navlogin"
         android:text="Login"
@@ -69,6 +68,7 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/login_buttonNav"
         app:srcCompat="@drawable/addchannelbutton" />
 
 </android.support.constraint.ConstraintLayout>

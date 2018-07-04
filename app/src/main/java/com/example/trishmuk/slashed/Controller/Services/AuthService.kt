@@ -1,14 +1,14 @@
 package com.example.trishmuk.slashed.Controller.Services
 
 import android.content.Context
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.trishmuk.slashed.Controller.Utilities.URL_CREATEUSER
-import com.example.trishmuk.slashed.Controller.Utilities.URL_LOGIN
-import com.example.trishmuk.slashed.Controller.Utilities.URL_REGISTER
+import com.example.trishmuk.slashed.Controller.Utilities.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -98,6 +98,7 @@ object AuthService {
             }
         }, Response.ErrorListener { error ->
             Log.d("Error", "Could not access data: $error")
+            complete(false)
         }){
             override fun getBodyContentType(): String {
                 return "application/json; charset=utf-8"
@@ -114,5 +115,39 @@ object AuthService {
             }
         }
         Volley.newRequestQueue(context).add(createRequest)
+    }
+
+    fun findUser (context: Context, complete: (Boolean) -> Unit){
+        val findRequest = object: JsonObjectRequest(Method.GET, "$URL_GETUSER${Email}", null, Response.Listener { response ->
+            try {
+                DataServices.name = response.getString("name")
+                DataServices.email = response.getString("email")
+                DataServices.avatarName = response.getString("avatarName")
+                DataServices.avatarColor = response.getString("avatarColor")
+                DataServices.id = response.getString("_id")
+
+                val userDef = Intent(SIGNUP_BROADCAST)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(userDef)
+                complete(true)
+            }catch (e: JSONException){
+                Log.d("Json Error", "EXC:"+e.localizedMessage)
+                complete(false)
+            }
+        }, Response.ErrorListener {error ->
+            Log.d("ERROR", "Could'nt find the user")
+            complete(false)
+        }) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Authorization", "Bearer $authToken")
+                return headers
+            }
+        }
+
+        Volley.newRequestQueue(context).add(findRequest)
     }
 }

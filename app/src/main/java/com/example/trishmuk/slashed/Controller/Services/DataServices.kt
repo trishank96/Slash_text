@@ -1,6 +1,7 @@
 package com.example.trishmuk.slashed.Controller.Services
 
 import android.graphics.Color
+import com.example.trishmuk.slashed.Controller.App
 import java.util.*
 
 object DataServices {
@@ -17,9 +18,12 @@ object DataServices {
         avatarName = ""
         avatarColor = ""
 
-        AuthService.authToken = ""
-        AuthService.Email = ""
-        AuthService.isloggedin = false
+
+        App.preference.authToken = ""
+        App.preference.userEmail = ""
+        App.preference.isLoggedin = false
+        MessageService.clearMessage()
+        MessageService.clearChannels()
     }
 
     fun getBgColor(components: String): Int{

@@ -31,11 +31,11 @@ class SignupActivity : AppCompatActivity() {
         val conPass = confirmpassword_signup.text.toString()
 
         if (uname != "" && email != "" && password != "" && (password == conPass)) {
-            AuthService.registerUser(this, email, password) { registerSuccess ->
+            AuthService.registerUser(email, password) { registerSuccess ->
                 if (registerSuccess) {
-                    AuthService.loginUser(this, email, password) { loginSuccess ->
+                    AuthService.loginUser( email, password) { loginSuccess ->
                         if (loginSuccess) {
-                            AuthService.createUser(this, uname, email, avatar, bgcolor) { createSuccess ->
+                            AuthService.createUser(uname, email, avatar, bgcolor) { createSuccess ->
                                 if (createSuccess) {
                                     val userData = Intent(SIGNUP_BROADCAST)
                                     LocalBroadcastManager.getInstance(this).sendBroadcast(userData)

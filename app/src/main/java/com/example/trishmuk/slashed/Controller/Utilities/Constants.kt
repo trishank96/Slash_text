@@ -6,6 +6,8 @@ const val URL_REGISTER = "${URL}account/register"
 const val URL_LOGIN = "${URL}account/login"
 const val URL_CREATEUSER = "${URL}user/add"
 const val URL_GETUSER = "${URL}user/byEmail/"
+const val URL_GETCHANNEL = "${URL}channel/"
+const val URL_GETMESSAGE = "${URL}message/byChannel/"
 
 //Broadcasts values
 const val SIGNUP_BROADCAST = "Broadcast_signup"

@@ -14,11 +14,14 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import com.example.trishmuk.slashed.Controller.Adapters.MessageAdapters
 import com.example.trishmuk.slashed.Controller.Models.Channels
 import com.example.trishmuk.slashed.Controller.Models.Messages
 import com.example.trishmuk.slashed.Controller.Services.AuthService
@@ -39,11 +42,18 @@ class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(URL_SOCKET)
     lateinit var channelAdapter: ArrayAdapter<Channels>
+    lateinit var messageAdapter: MessageAdapters
     var selectedChannel: Channels? = null
 
     private fun setupAdapter(){
         channelAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, MessageService.channels)
         channel_list.adapter = channelAdapter
+
+        messageAdapter = MessageAdapters(this, MessageService.messages)
+        mainMessagesView.adapter = messageAdapter
+
+        val layoutMan = LinearLayoutManager(this)
+        mainMessagesView.layoutManager = layoutMan
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,8 +127,9 @@ class MainActivity : AppCompatActivity() {
         if (selectedChannel != null){
             MessageService.getMessages(selectedChannel!!.id){complete ->
                 if (complete){
-                    for (message in MessageService.messages){
-                        println(message.message)
+                    messageAdapter.notifyDataSetChanged()
+                    if (messageAdapter.itemCount > 0){
+                        mainMessagesView.smoothScrollToPosition(messageAdapter.itemCount-1)
                     }
                 }
             }
@@ -136,6 +147,8 @@ class MainActivity : AppCompatActivity() {
     fun navlogin(view: View){
         if (App.preference.isLoggedin){
             DataServices.logout()
+            channelAdapter.notifyDataSetChanged()
+            messageAdapter.notifyDataSetChanged()
             userName_nav.text = "Please Login"
             userEmail_nav.text = ""
             userIcon_nav.setImageResource(R.drawable.profiledefault)
@@ -201,6 +214,8 @@ class MainActivity : AppCompatActivity() {
 
                     val newMessage = Messages(messageBody, userName, channel_id, userAvatar, avatarColor, mess_id, timestamp)
                     MessageService.messages.add(newMessage)
+                    messageAdapter.notifyDataSetChanged()
+                    mainMessagesView.smoothScrollToPosition(messageAdapter.itemCount-1)
                 }
             }
         }

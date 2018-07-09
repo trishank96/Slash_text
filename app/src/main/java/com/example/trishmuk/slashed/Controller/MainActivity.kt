@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+        LocalBroadcastManager.getInstance(this).registerReceiver(userData, IntentFilter(SIGNUP_BROADCAST))
 
         setupAdapter()
         if (App.preference.isLoggedin){
@@ -82,11 +83,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        LocalBroadcastManager.getInstance(this).registerReceiver(userData, IntentFilter(SIGNUP_BROADCAST))
 
-    }
 
 
 
@@ -154,6 +151,7 @@ class MainActivity : AppCompatActivity() {
             userIcon_nav.setImageResource(R.drawable.profiledefault)
             userIcon_nav.setBackgroundColor(Color.TRANSPARENT)
             login_buttonNav.text = "Login"
+            Container_text.text = "Please Login!!"
         }else {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
